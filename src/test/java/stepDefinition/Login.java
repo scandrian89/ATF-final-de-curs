@@ -7,7 +7,11 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 import static Actions.Action.*;
+import static Util.DataKeys.PASSWORD;
+import static Util.DataKeys.USERNAME;
 import static Util.HighlightElement.highlightElement;
+import static Util.ScenarioContext.getData;
+import static Util.ScenarioContext.saveData;
 import static Util.WaitUntil.waitUntil;
 
 public class Login extends AbstractStepDef {
@@ -17,12 +21,14 @@ public class Login extends AbstractStepDef {
         navigate(loginPageUrl, driver);
         waitUntil(3);
         sendKey(loginPage.getUsernameField(), "Admin");
+        saveData(USERNAME, "Admin");
     }
 
     @And("user insert password")
     public void userInsertPassword() throws InterruptedException {
         waitUntil(3);
         sendKey(loginPage.getPasswordField(), "admin123");
+        saveData(PASSWORD, "admin123");
     }
 
     @When("user clicks on Login button")
@@ -43,5 +49,17 @@ public class Login extends AbstractStepDef {
         highlightElement(homePage.getLogOutButton());
         waitUntil(5);
         click(homePage.getLogOutButton(), 1);
+    }
+
+    @Given("insert username")
+    public void insertUsername() throws InterruptedException {
+        waitUntil(3);
+        sendKey(loginPage.getUsernameField(), getData(USERNAME).toString());
+    }
+
+    @And("insert password")
+    public void insertPassword() throws InterruptedException {
+        waitUntil(3);
+        sendKey(loginPage.getPasswordField(), getData(PASSWORD).toString());
     }
 }
