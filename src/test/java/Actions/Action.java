@@ -1,11 +1,17 @@
 package Actions;
 
+import io.cucumber.java.Scenario;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.io.File;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static Util.CreationFolderIfNotExist.createDirectoryIfNotExists;
 
 public class Action {
     public static void isDisplayed(WebElement element) {
@@ -29,22 +35,22 @@ public class Action {
         driver.get(navigateTo);
     }
 
-//    public static void takeScreenshot(Scenario scenario, WebDriver driver) {
-//        try {
-//            String screeshotName = generateScreenshotName(scenario.getName());
-//            String directoryname = "target/screenshots/";
-//            createDirectoryIfNotExists(directoryName);
-//            File file = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-//            FileUtils.copyFile(file, new File(directoryname + screeshotName + ".png"));
-//        } cathc (Exception e){
-//            System.out.println("Screenshot nu lucreaza " + e);
-//        }
-//    }
-//
-//    private static String generateScreenshotName(String scenarioName) {
-//    LocalDateTime currentTime = LocalDateTime.now();
-//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern ("yyyy-MM-dd_HH-mm-ss");
-//    String timestamp = currentTime.format(formatter);
-//    return scenarioName.replaceAll("[^a-zA-Z0-9_-]", "_") + "_" + timestamp;
-//        }
+    public static void takeScreenshot(Scenario scenario, WebDriver driver) {
+        try {
+            String screeshotName = generateScreenshotName(scenario.getName());
+            String directoryname = "target/screenshots/";
+            createDirectoryIfNotExists(directoryname);
+            File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(file, new File(directoryname + screeshotName + ".png"));
+        } catch (Exception e) {
+            System.out.println("Screenshot nu lucreaza " + e);
+        }
+    }
+
+    private static String generateScreenshotName(String scenarioName) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+        String timestamp = currentTime.format(formatter);
+        return scenarioName.replaceAll("[^a-zA-Z0-9_-]", "_") + "_" + timestamp;
+    }
 }
